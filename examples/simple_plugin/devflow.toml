@@ -1,0 +1,12 @@
+# Example devflow configuration with plugin loading
+#
+# This configuration demonstrates how to load a custom plugin
+# from a local module.
+
+# Plugin configuration
+[plugins]
+modules = ["my_plugin"]
+
+# Project settings (optional)
+venv_dir = ".venv"
+default_python = "python3"
