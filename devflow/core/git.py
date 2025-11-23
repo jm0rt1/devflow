@@ -260,15 +260,27 @@ def get_version_from_setuptools_scm(path: Optional[Path] = None) -> Optional[str
         return None
 
 
-def get_version_from_git_tags(path: Optional[Path] = None) -> Optional[str]:
+def get_version_from_git_tags(
+    path: Optional[Path] = None, version_pattern: Optional[str] = None
+) -> Optional[str]:
     """
     Get version from the most recent git tag.
 
     Args:
         path: Path to repository (defaults to current directory)
+        version_pattern: Optional regex pattern to extract version from tag.
+                        Default pattern matches common version formats like:
+                        - 1.0.0
+                        - 1.0.0-alpha.1
+                        - 1.0.0.dev0
+                        - 1.0.0+build.123
 
     Returns:
         Version string extracted from tag, or None if no tags found
+
+    Note:
+        For more robust version parsing, consider using `packaging.version.parse()`
+        from the packaging library if more complex version schemes are needed.
     """
     try:
         result = run_git_command(
@@ -278,11 +290,16 @@ def get_version_from_git_tags(path: Optional[Path] = None) -> Optional[str]:
         )
         tag = result.stdout.strip()
 
-        # Try to extract version from tag (e.g., "v1.0.0" -> "1.0.0")
-        # Match common version patterns
-        match = re.search(r'(\d+\.\d+\.\d+(?:[.-]\w+)?)', tag)
+        # Use custom pattern if provided, otherwise use default
+        if version_pattern is None:
+            # Match semantic versions with optional pre-release and build metadata
+            # Examples: 1.0.0, 1.0.0-alpha.1, 1.0.0+build.123, 1.0.0-rc.1+build.456
+            version_pattern = r'(\d+\.\d+\.\d+(?:[.-][\w.]+)?(?:\+[\w.]+)?)'
+
+        match = re.search(version_pattern, tag)
         if match:
             return match.group(1)
+        # If no match found, return the tag as-is (may be a valid version)
         return tag
     except GitError:
         return None

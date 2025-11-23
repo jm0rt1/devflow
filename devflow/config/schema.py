@@ -6,7 +6,23 @@ from pydantic import BaseModel, Field
 
 
 class PublishConfig(BaseModel):
-    """Configuration for publish operations."""
+    """
+    Configuration for publish operations.
+
+    Attributes:
+        repository: Target package repository (e.g., "pypi", "testpypi"). Default: "pypi"
+        sign: Whether to sign packages with GPG before uploading. Default: False
+        tag_on_publish: Automatically create a git tag when publishing. Default: True
+        tag_format: Format string for git tags with {version} placeholder. Default: "v{version}"
+        tag_prefix: Additional prefix to prepend to formatted tag. Default: ""
+        require_clean_working_tree: Require no uncommitted changes before publishing. Default: True
+        version_source: Source for version information. Valid values:
+            - "setuptools_scm": Use setuptools_scm to determine version from git
+            - "config": Use version specified in config file
+            - "pyproject": Read version from pyproject.toml
+            - "git_tags": Extract version from most recent git tag
+            Default: "setuptools_scm"
+    """
 
     repository: str = "pypi"
     sign: bool = False
