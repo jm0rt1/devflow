@@ -5,7 +5,6 @@ This module provides the command-line interface using Typer.
 """
 
 import sys
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -29,7 +28,7 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def main(
     version: Annotated[
-        Optional[bool],
+        bool | None,
         typer.Option(
             "--version",
             callback=version_callback,
@@ -38,14 +37,14 @@ def main(
         ),
     ] = None,
     config: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--config",
             help="Path to config file.",
         ),
     ] = None,
     project_root: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--project-root",
             help="Project root directory.",

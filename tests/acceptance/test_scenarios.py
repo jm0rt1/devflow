@@ -18,7 +18,7 @@ import pytest
 
 
 def run_devflow(
-    args: List[str], cwd: Path = None, check: bool = False
+    args: List[str], cwd: Path | None = None, check: bool = False
 ) -> subprocess.CompletedProcess:
     """Helper to run devflow CLI."""
     cmd = [sys.executable, "-m", "devflow.cli"] + args
@@ -31,7 +31,9 @@ def run_devflow(
     )
 
 
-def create_test_project(base_dir: Path, config: Dict[str, Any] = None) -> Path:
+def create_test_project(
+    base_dir: Path, config: Dict[str, Any] | None = None
+) -> Path:
     """Create a minimal test project with pyproject.toml."""
     project_dir = base_dir / "test_project"
     project_dir.mkdir(exist_ok=True)
