@@ -38,6 +38,8 @@ htmlcov/
 .nox/
 
 # IDE
+
+# IDEs
 .vscode/
 .idea/
 *.swp

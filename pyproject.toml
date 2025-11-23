@@ -12,6 +12,24 @@ dependencies = [
     "typer>=0.9.0",
     "pydantic>=2.0.0",
     "tomli>=2.0.0; python_version < '3.11'",
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "devflow contributors"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "typer[all]>=0.9.0",
+    "pydantic>=2.0.0",
+    "tomli>=2.0.0;python_version<'3.11'",
 ]
 
 [project.optional-dependencies]
@@ -37,6 +55,27 @@ target-version = "py38"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4"]
 ignore = ["E501", "B904"]  # B904: Allow raise without from in exception handlers
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+]
+
+[project.scripts]
+devflow = "devflow.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["devflow*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = []
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
