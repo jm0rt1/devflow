@@ -1,13 +1,8 @@
 """Custom task execution with pipeline expansion and cycle detection."""
 
-from typing import TYPE_CHECKING
-
 from devflow.config import TaskConfig
 
 from .base import Command, Pipeline, Task
-
-if TYPE_CHECKING:
-    pass
 
 
 class CycleError(Exception):

@@ -96,9 +96,14 @@ class Task:
 
         # Add venv to PATH if requested
         if self.use_venv:
-            venv_bin = app.venv_path / "bin"
+            import sys
+            # Use 'Scripts' on Windows, 'bin' on Unix-like systems
+            venv_bin_dir = "Scripts" if sys.platform == "win32" else "bin"
+            venv_bin = app.venv_path / venv_bin_dir
             if venv_bin.exists():
-                env["PATH"] = f"{venv_bin}:{env.get('PATH', '')}"
+                # Use appropriate path separator for platform
+                path_sep = ";" if sys.platform == "win32" else ":"
+                env["PATH"] = f"{venv_bin}{path_sep}{env.get('PATH', '')}"
                 env["VIRTUAL_ENV"] = str(app.venv_path)
                 app.logger.debug(f"Using venv: {app.venv_path}", prefix=prefix)
             else:
