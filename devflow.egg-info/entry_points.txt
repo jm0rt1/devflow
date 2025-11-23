@@ -1,0 +1,2 @@
+[console_scripts]
+devflow = devflow.cli:cli_main

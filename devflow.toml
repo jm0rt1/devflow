@@ -1,0 +1,15 @@
+[devflow]
+venv_dir = ".venv"
+default_python = "python3"
+test_runner = "pytest"
+
+[devflow.tasks.lint]
+command = "ruff"
+args = ["check", "."]
+
+[devflow.tasks.format]
+command = "ruff"
+args = ["format"]
+
+[devflow.tasks.ci-check]
+pipeline = ["format", "lint", "test"]
