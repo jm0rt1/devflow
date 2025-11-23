@@ -31,9 +31,7 @@ def run_devflow(
     )
 
 
-def create_test_project(
-    base_dir: Path, config: Dict[str, Any] | None = None
-) -> Path:
+def create_test_project(base_dir: Path, config: Dict[str, Any] | None = None) -> Path:
     """Create a minimal test project with pyproject.toml."""
     project_dir = base_dir / "test_project"
     project_dir.mkdir(exist_ok=True)
