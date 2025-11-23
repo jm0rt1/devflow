@@ -1,0 +1,152 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "devflow"
+version = "0.1.0"
+description = "A Python-Native Project Operations CLI"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "devflow contributors" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "typer>=0.9.0",
+    "typing-extensions>=4.0.0",
+    "tomli>=2.0.0; python_version<'3.11'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+]
+
+[project.scripts]
+devflow = "devflow.cli:cli_main"
+
+[project.urls]
+Homepage = "https://github.com/jm0rt1/devflow"
+Repository = "https://github.com/jm0rt1/devflow"
+Documentation = "https://github.com/jm0rt1/devflow/blob/main/docs/DESIGN_SPEC.md"
+
+[tool.hatchling.build.targets.wheel]
+packages = ["devflow"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]  # Allow assert in tests
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+]
+
+[tool.coverage.run]
+source = ["devflow"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if TYPE_CHECKING:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.devflow]
+# Example configuration for devflow itself
+venv_dir = ".venv"
+default_python = "python3"
+build_backend = "build"
+test_runner = "pytest"
+
+[tool.devflow.paths]
+dist_dir = "dist"
+tests_dir = "tests"
+src_dir = "devflow"
+
+[tool.devflow.tasks.lint]
+command = "ruff"
+args = ["check", "."]
+
+[tool.devflow.tasks.format]
+command = "ruff"
+args = ["format", "."]
+
+[tool.devflow.tasks.type-check]
+command = "mypy"
+args = ["devflow"]
+
+[tool.devflow.tasks.test]
+command = "pytest"
+args = ["-v", "--cov=devflow", "--cov-report=term-missing"]
+use_venv = true
+
+[tool.devflow.tasks.ci-check]
+pipeline = ["lint", "type-check", "test"]
