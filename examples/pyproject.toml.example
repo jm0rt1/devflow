@@ -1,0 +1,23 @@
+# Example pyproject.toml configuration for devflow
+
+[build-system]
+requires = ["setuptools>=68.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-package"
+version = "0.1.0"
+description = "My Python package"
+requires-python = ">=3.8"
+
+# devflow configuration
+[tool.devflow]
+venv_dir = ".venv"
+test_runner = "pytest"
+build_backend = "build"
+
+[tool.devflow.publish]
+repository = "pypi"
+tag_on_publish = true
+tag_format = "v{version}"
+require_clean_working_tree = true
