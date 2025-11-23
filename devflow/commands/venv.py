@@ -69,6 +69,7 @@ class VenvInitCommand(Command):
                 capture_output=True,
                 text=True,
                 cwd=self.app.project_root,
+                shell=False,
             )
 
             if result.returncode != 0:
@@ -119,6 +120,7 @@ class VenvInitCommand(Command):
             capture_output=True,
             text=True,
             cwd=self.app.project_root,
+            shell=False,
         )
         return result.returncode
 

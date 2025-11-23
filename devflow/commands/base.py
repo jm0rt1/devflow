@@ -93,6 +93,7 @@ class TaskExecutor:
                 env={**subprocess.os.environ, **env} if env else None,
                 capture_output=self.app.verbosity < 2,
                 text=True,
+                shell=False,
             )
 
             if result.returncode != 0:

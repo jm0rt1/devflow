@@ -69,6 +69,7 @@ class DepsSyncCommand(Command):
                 capture_output=self.app.verbosity < 2,
                 text=True,
                 cwd=self.app.project_root,
+                shell=False,
             )
 
             if result.returncode != 0:
@@ -152,6 +153,7 @@ class DepsFreezeCommand(Command):
             capture_output=True,
             text=True,
             cwd=self.app.project_root,
+            shell=False,
         )
 
         if result.returncode != 0:
