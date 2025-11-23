@@ -248,6 +248,18 @@ class TestGetVersionFromGitTags:
         version = get_version_from_git_tags(temp_git_repo)
         assert version == "2.3.4"
 
+    def test_custom_version_pattern(self, temp_git_repo: Path) -> None:
+        """Test using custom version pattern for extraction."""
+        subprocess.run(
+            ["git", "tag", "custom_v20231123"],
+            cwd=temp_git_repo,
+            check=True,
+            capture_output=True,
+        )
+        # Custom pattern to extract date-based version
+        version = get_version_from_git_tags(temp_git_repo, version_pattern=r"(\d{8})")
+        assert version == "20231123"
+
 
 class TestGetCurrentVersion:
     """Tests for get_current_version function."""
