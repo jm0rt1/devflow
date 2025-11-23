@@ -86,3 +86,52 @@ This document packages the design white paper into actionable, parallelizable tr
 - Align on logging format, verbosity flags, phase prefixing, and dry-run semantics early; reuse across commands and tests.
 - Favor small, mergeable PRs per workstream; keep integration tests green and avoid overlapping edits to schema or core helpers without coordination.
 - Cross-reference acceptance scenarios from the design white paper and update this plan as evidence accumulates.
+
+## Ready-to-Send Prompts for GitHub Copilot Agents
+
+Use these copy/paste prompts to spin up multiple Copilot agents in parallel. Each prompt already references the in-repo design spec and this plan so agents stay aligned.
+
+**Global setup prompt (send to every agent before workstream specifics):**
+"""
+You are implementing the Python CLI tool "devflow". Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md for requirements, scope, and conventions. Honor global flags (`--config`, `--project-root`, `--dry-run`, `--verbose/-v`, `--quiet/-q`, `--version`) and keep all subprocess calls shell=False with explicit arg lists. Favor Typer for CLI, Pydantic/dataclasses for config, tomllib/tomli for TOML parsing. Preserve the config surface in the design spec (venv_dir, default_python, build_backend, test_runner, paths, publish, deps, tasks, pipelines). Use structured logging with verbosity and dry-run support. Write unit/integration tests where described.
+"""
+
+**Workstream A (Bootstrap & App Context):**
+"""
+Implement project bootstrap per docs/COPILOT_PLAN.md Workstream A. Deliver package layout, project-root detection, config discovery/merging order, typed schema matching the sample TOML, and AppContext. Provide tests for root detection, config parsing, and default override behavior. Ensure `devflow --help` shows stub commands.
+"""
+
+**Workstream B (Command Framework & Task Engine):**
+"""
+Follow Workstream B in docs/COPILOT_PLAN.md. Build Command base/registry integrated with Typer, Task/Pipeline abstractions with dry-run, verbosity, env propagation, and exit-code short-circuiting. Implement `devflow task <name>` with pipeline expansion and cycle detection. Add unit tests for pipelines, dry-run behavior, and error messaging.
+"""
+
+**Workstream C (Venv & Dependency Management):**
+"""
+Follow Workstream C in docs/COPILOT_PLAN.md. Implement venv helpers and `devflow venv init` honoring default_python, venv_dir, --python, --recreate. Add deps sync/freeze commands honoring config, deterministic freeze output, and dry-run previews. Add integration tests with temp projects for venv creation, sync, and freeze.
+"""
+
+**Workstream D (Test, Build, Publish):**
+"""
+Follow Workstream D in docs/COPILOT_PLAN.md. Implement `devflow test` (pass-through args, venv enforcement), `devflow build` (configurable backend, dist handling), and `devflow publish` (clean working tree check, optional pre-tests, build+upload via twine, signing, tagging per tag_format, --dry-run). Add integration tests for success/failure paths and dry-run behavior.
+"""
+
+**Workstream E (Git Integration):**
+"""
+Implement Workstream E from docs/COPILOT_PLAN.md. Build git helpers for status checks, tag formatting/creation, version surfacing (setuptools_scm or config fallback). Wire require_clean_working_tree, tag_on_publish, tag_format/tag_prefix, version_source flags. Add tests using temp git repos for dirty-tree blocking and idempotent tagging.
+"""
+
+**Workstream F (Plugins & Extensibility):**
+"""
+Implement Workstream F per docs/COPILOT_PLAN.md. Define plugin discovery via entry points/config module paths, plugin interface (e.g., register(registry, app)), and a sample plugin fixture adding a command/task. Ensure bad plugins fail gracefully. Add tests for discovery, registration, precedence, and isolation.
+"""
+
+**Workstream G (UX, Completion, Docs):**
+"""
+Implement Workstream G per docs/COPILOT_PLAN.md. Add `devflow completion <shell>` for bash/zsh/fish, ensure `devflow` with no args lists commands and project tasks, enrich help text with examples from the design spec, and maintain Quickstart/troubleshooting docs. Add snapshot/help tests where practical.
+"""
+
+**Workstream H (CI, Packaging, Evidence):**
+"""
+Implement Workstream H per docs/COPILOT_PLAN.md. Create pyproject.toml with console_scripts entry, runtime/dev deps. Add CI workflow covering lint/type-check/tests; plan matrix for ubuntu/macos/windows Git Bash per portability NFRs. Encode acceptance scenarios (venv/test/build/publish dry-run, ci-check pipeline, dirty git blocking) and capture logs/artifacts for evidence.
+"""
