@@ -28,12 +28,16 @@ MANIFEST
 venv/
 ENV/
 env/
+.env
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
 .tox/
+.nox/
+
+# IDE
 
 # IDEs
 .vscode/
