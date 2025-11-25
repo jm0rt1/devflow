@@ -1,5 +1,7 @@
 """Tests for shell completion generation."""
 
+from typing import List, cast
+
 import pytest
 
 from devflow.completion import (
@@ -8,6 +10,10 @@ from devflow.completion import (
     generate_fish_completion,
     get_completion_script,
 )
+from devflow.completion.generator import ShellType
+
+# Valid shell types for testing
+VALID_SHELLS: List[ShellType] = ["bash", "zsh", "fish"]
 
 
 class TestBashCompletion:
@@ -151,14 +157,16 @@ class TestGetCompletionScript:
     def test_raises_for_unsupported_shell(self):
         """Should raise ValueError for unsupported shell."""
         with pytest.raises(ValueError) as exc_info:
-            get_completion_script("powershell")  # type: ignore
+            # Intentionally passing an invalid shell type to test error handling
+            get_completion_script(cast(ShellType, "powershell"))
         assert "Unsupported shell" in str(exc_info.value)
         assert "powershell" in str(exc_info.value)
 
     def test_error_message_lists_supported_shells(self):
         """Error message should list supported shells."""
         with pytest.raises(ValueError) as exc_info:
-            get_completion_script("tcsh")  # type: ignore
+            # Intentionally passing an invalid shell type to test error handling
+            get_completion_script(cast(ShellType, "tcsh"))
         error_msg = str(exc_info.value)
         assert "bash" in error_msg
         assert "zsh" in error_msg
@@ -221,15 +229,15 @@ class TestCompletionConsistency:
         """All shell completions should expose the same commands."""
         commands = ["venv", "deps", "test", "build", "publish", "task", "ci-check", "completion"]
         
-        for shell in ["bash", "zsh", "fish"]:
-            script = get_completion_script(shell)  # type: ignore
+        for shell in VALID_SHELLS:
+            script = get_completion_script(shell)
             for cmd in commands:
                 assert cmd in script, f"Command '{cmd}' missing in {shell} completion"
 
     def test_all_shells_have_venv_subcommands(self):
         """All shell completions should have venv subcommands."""
-        for shell in ["bash", "zsh", "fish"]:
-            script = get_completion_script(shell)  # type: ignore
+        for shell in VALID_SHELLS:
+            script = get_completion_script(shell)
             assert "init" in script, f"'init' subcommand missing in {shell} completion"
             # Fish uses -l python, bash/zsh use --python
             assert "python" in script, f"'python' option missing in {shell} completion"
@@ -237,8 +245,8 @@ class TestCompletionConsistency:
 
     def test_all_shells_have_deps_subcommands(self):
         """All shell completions should have deps subcommands."""
-        for shell in ["bash", "zsh", "fish"]:
-            script = get_completion_script(shell)  # type: ignore
+        for shell in VALID_SHELLS:
+            script = get_completion_script(shell)
             assert "sync" in script, f"'sync' subcommand missing in {shell} completion"
             assert "freeze" in script, f"'freeze' subcommand missing in {shell} completion"
 
@@ -247,7 +255,7 @@ class TestCompletionConsistency:
         # Use option names without dashes to support fish (which uses -l)
         publish_options = ["repository", "allow-dirty", "skip-tests"]
         
-        for shell in ["bash", "zsh", "fish"]:
-            script = get_completion_script(shell)  # type: ignore
+        for shell in VALID_SHELLS:
+            script = get_completion_script(shell)
             for opt in publish_options:
                 assert opt in script, f"'{opt}' option missing in {shell} completion"

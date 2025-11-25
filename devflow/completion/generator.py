@@ -62,7 +62,11 @@ _devflow_completion() {
             return 0
             ;;
         task)
-            # TODO: Dynamic task completion from config (requires Workstream A config loader)
+            # TODO: Dynamic task completion from config
+            # Workstream A's config loader will provide task discovery via AppContext.
+            # When integrated, this section should call a helper function to read
+            # [tool.devflow.tasks.*] sections and return task names for completion.
+            # Example: _get_project_tasks() -> list[str]
             COMPREPLY=($(compgen -W "--help" -- "${cur}"))
             return 0
             ;;
@@ -164,7 +168,10 @@ _devflow() {
                         '--help[Show help]'
                     ;;
                 task)
-                    # TODO: Dynamic task completion from config (requires Workstream A config loader)
+                    # TODO: Dynamic task completion from config
+                    # Workstream A's config loader will provide task discovery via AppContext.
+                    # When integrated, this section should call a helper function to read
+                    # [tool.devflow.tasks.*] sections and return task names for completion.
                     _arguments \\
                         '1:task name:' \\
                         '--help[Show help]' \\
