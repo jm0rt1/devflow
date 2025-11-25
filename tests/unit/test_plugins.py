@@ -9,6 +9,7 @@ These tests verify:
 
 from __future__ import annotations
 
+import importlib
 import logging
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -30,6 +31,9 @@ from devflow.plugins.loader import (
     _load_plugin_module,
     _merge_plugins,
 )
+
+# Import sample plugin module at module level for integration tests
+from tests.fixtures.plugins.sample_hello import HelloCommand
 
 
 class TestPluginMetadata:
@@ -463,7 +467,8 @@ class TestPluginSpec:
 
     def test_protocol_check_valid_module(self) -> None:
         """Test that valid plugin modules satisfy the protocol."""
-        import tests.fixtures.plugins.sample_hello as sample
+        # Import dynamically to test module loading behavior
+        sample = importlib.import_module("tests.fixtures.plugins.sample_hello")
 
         # The module should have a register function
         assert hasattr(sample, "register")
@@ -471,7 +476,8 @@ class TestPluginSpec:
 
     def test_protocol_check_invalid_module(self) -> None:
         """Test that invalid modules don't satisfy the protocol."""
-        import tests.fixtures.plugins.missing_register as bad
+        # Import dynamically to test module loading behavior
+        bad = importlib.import_module("tests.fixtures.plugins.missing_register")
 
         # The module should not have a register function
         assert not hasattr(bad, "register")
@@ -514,8 +520,6 @@ class TestIntegration:
 
     def test_sample_plugin_command_execution(self) -> None:
         """Test that the sample plugin command can be executed."""
-        from tests.fixtures.plugins.sample_hello import HelloCommand
-
         # Create minimal app mock
         class MockApp:
             dry_run = False
@@ -529,8 +533,6 @@ class TestIntegration:
 
     def test_sample_plugin_dry_run(self) -> None:
         """Test sample plugin respects dry-run flag."""
-        from tests.fixtures.plugins.sample_hello import HelloCommand
-
         class MockApp:
             dry_run = True
 
