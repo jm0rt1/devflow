@@ -34,7 +34,7 @@ class TestCLI:
         # This verifies the module has the if __name__ == "__main__" block
         import ast
 
-        with open(cli.__file__) as f:
+        with open(cli.__file__, encoding="utf-8") as f:
             tree = ast.parse(f.read())
 
         # Check for if __name__ == "__main__": pattern

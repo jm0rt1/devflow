@@ -10,6 +10,8 @@ This is a minimal stub for packaging purposes only.
 
 import sys
 
+from devflow import __version__
+
 
 def main() -> int:
     """
@@ -20,7 +22,7 @@ def main() -> int:
     """
     # TODO: Workstream A will implement full CLI with Typer
     # This stub allows the package to be installed and CLI to be invoked
-    print("devflow v0.1.0")
+    print(f"devflow v{__version__}")
     print("CLI implementation pending - see Workstream A")
     print("")
     print("Available commands (to be implemented):")
