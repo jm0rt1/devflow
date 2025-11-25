@@ -1,6 +1,6 @@
 """Typed configuration schema for devflow.
 
-This module defines the Pydantic models that represent the devflow configuration.
+This module defines dataclass models that represent the devflow configuration.
 The schema mirrors the sample TOML from the design specification.
 """
 
@@ -87,7 +87,10 @@ class DevflowConfig:
 
         Handles nested configuration objects and provides defaults for missing values.
         """
-        # Extract nested configs
+        # Make a copy to avoid modifying the input
+        data = dict(data)
+
+        # Extract nested configs without modifying original
         paths_data = data.pop("paths", {})
         publish_data = data.pop("publish", {})
         deps_data = data.pop("deps", {})
