@@ -10,6 +10,7 @@ Ownership: Workstream D
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -177,7 +178,7 @@ def run_test(
         result = subprocess.run(
             cmd,
             cwd=app.project_root,
-            env={**subprocess.os.environ, **env} if env else None,
+            env={**os.environ, **env} if env else None,
             check=False,
         )
         return result.returncode

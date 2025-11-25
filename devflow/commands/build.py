@@ -11,6 +11,7 @@ Ownership: Workstream D
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -211,7 +212,7 @@ def run_build(
         result = subprocess.run(
             cmd,
             cwd=app.project_root,
-            env={**subprocess.os.environ, **env} if env else None,
+            env={**os.environ, **env} if env else None,
             check=False,
         )
         if result.returncode == 0 and app.verbose >= 0 and not app.quiet:
