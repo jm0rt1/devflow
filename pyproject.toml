@@ -1,0 +1,20 @@
+[project]
+name = "devflow"
+version = "0.1.0"
+description = "A Python-native project operations CLI"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["devflow/tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
