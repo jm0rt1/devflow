@@ -3,7 +3,9 @@ name = "devflow"
 version = "0.1.0"
 description = "A Python-native project operations CLI"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    "tomli>=2.0; python_version < '3.11'",
+]
 
 [project.optional-dependencies]
 dev = [

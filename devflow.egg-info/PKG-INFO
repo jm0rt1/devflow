@@ -1,7 +1,0 @@
-Metadata-Version: 2.4
-Name: devflow
-Version: 0.1.0
-Summary: A Python-native project operations CLI
-Requires-Python: >=3.9
-Provides-Extra: dev
-Requires-Dist: pytest>=7.0; extra == "dev"

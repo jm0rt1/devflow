@@ -302,7 +302,7 @@ class DepsManager:
         content = "\n".join(header + packages) + "\n"
 
         if self.dry_run:
-            self._log("DRY RUN: Would write the following to {output_file}:")
+            self._log(f"DRY RUN: Would write the following to {output_file}:")
             print("=" * 60)
             print(content)
             print("=" * 60)
