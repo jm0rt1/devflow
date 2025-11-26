@@ -68,7 +68,8 @@ def setup_logging(verbosity: int = VERBOSITY_DEFAULT) -> logging.Logger:
 
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-
+    # Prevent log messages from propagating to parent loggers
+    logger.propagate = False
     return logger
 
 
