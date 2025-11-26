@@ -38,7 +38,7 @@ class TestFindProjectRoot:
         assert result == tmp_path
 
     def test_prefers_pyproject_over_devflow(self, tmp_path: Path) -> None:
-        """Should find the first marker file when walking up."""
+        """Should find project root when both marker files exist."""
         # Create both files at root
         (tmp_path / "pyproject.toml").write_text("[project]\n")
         (tmp_path / "devflow.toml").write_text("[devflow]\n")
