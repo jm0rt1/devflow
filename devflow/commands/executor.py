@@ -328,7 +328,7 @@ class TaskExecutor:
                 command_list,
                 cwd=working_dir,
                 env=env,
-                capture_output=self.verbosity < 1,  # Capture output only in non-verbose mode
+                capture_output=self.verbosity < 1,  # Capture output in normal and quiet modes
                 text=True,
             )
 
