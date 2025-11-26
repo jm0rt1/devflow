@@ -3,7 +3,6 @@
 Ownership: Workstream B (task/registry)
 """
 
-import pytest
 
 from devflow.commands.task import Pipeline, Task, is_pipeline, is_task
 
