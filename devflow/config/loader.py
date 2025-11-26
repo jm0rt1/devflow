@@ -57,7 +57,7 @@ def find_config_file(project_root: Path, explicit_config: Path | None = None) ->
             data = _parse_toml(pyproject_path)
             if "tool" in data and "devflow" in data["tool"]:
                 return pyproject_path
-        except Exception:
+        except tomllib.TOMLDecodeError:
             pass  # Fall through to next option
 
     # 3. devflow.toml in project root
