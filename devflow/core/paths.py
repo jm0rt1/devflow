@@ -13,9 +13,6 @@ from pathlib import Path
 class ProjectRootNotFoundError(Exception):
     """Raised when project root cannot be detected."""
 
-    pass
-
-
 def find_project_root(start: Path | None = None) -> Path:
     """Find the project root by walking upward from start directory.
 
