@@ -1,2 +1,4 @@
-# Tests for devflow commands - Workstream B
-"""Test suite for Command Framework & Task Engine."""
+"""Tests package for devflow.
+
+Test suite includes Command Framework & Task Engine tests (Workstream B).
+"""
