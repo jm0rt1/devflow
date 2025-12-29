@@ -1,0 +1,54 @@
+# Sample pyproject.toml with devflow configuration
+# Used for testing configuration loading
+
+[project]
+name = "sample-project"
+version = "0.1.0"
+description = "A sample project for testing devflow"
+requires-python = ">=3.9"
+
+[tool.devflow]
+venv_dir = ".venv"
+default_python = "python3.11"
+build_backend = "build"
+test_runner = "pytest"
+package_index = "pypi"
+auto_discover_tasks = true
+
+[tool.devflow.paths]
+dist_dir = "dist"
+tests_dir = "tests"
+src_dir = "src"
+
+[tool.devflow.publish]
+repository = "pypi"
+sign = true
+tag_on_publish = true
+tag_format = "v{version}"
+require_clean_working_tree = true
+
+[tool.devflow.deps]
+requirements = "requirements.txt"
+dev_requirements = "requirements-dev.txt"
+freeze_output = "requirements-freeze.txt"
+
+[tool.devflow.tasks.test]
+command = "pytest"
+args = ["-q"]
+use_venv = true
+
+[tool.devflow.tasks.build]
+command = "python"
+args = ["-m", "build"]
+use_venv = true
+
+[tool.devflow.tasks.lint]
+command = "ruff"
+args = ["check", "."]
+
+[tool.devflow.tasks.format]
+command = "ruff"
+args = ["format"]
+
+[tool.devflow.tasks.ci-check]
+pipeline = ["format", "lint", "test"]
