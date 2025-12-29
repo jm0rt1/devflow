@@ -1,3 +1,10 @@
+[project]
+name = "devflow"
+version = "0.1.0"
+description = "A Python-native project operations CLI"
+requires-python = ">=3.9"
+dependencies = [
+    "tomli>=2.0; python_version < '3.11'",
 # pyproject.toml for devflow
 # Core packaging configuration - owned by Workstream H
 # Workstream A provides minimal bootstrap for testing
@@ -34,6 +41,17 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "pytest>=7.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["devflow/tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "ruff>=0.1.0",
