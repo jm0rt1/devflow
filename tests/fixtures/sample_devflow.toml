@@ -1,0 +1,21 @@
+# Sample devflow.toml configuration file
+# Alternative to pyproject.toml configuration
+
+[devflow]
+venv_dir = ".devflow-venv"
+default_python = "python3.10"
+build_backend = "hatchling"
+test_runner = "pytest"
+
+[devflow.paths]
+dist_dir = "output"
+src_dir = "lib"
+
+[devflow.publish]
+repository = "testpypi"
+sign = false
+tag_on_publish = false
+
+[devflow.tasks.check]
+command = "ruff"
+args = ["check", "--fix", "."]

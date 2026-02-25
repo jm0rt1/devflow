@@ -117,12 +117,6 @@ This document packages the design white paper into actionable, parallelizable tr
 
 Use these copy/paste prompts to spin up multiple Copilot agents in parallel. Each prompt already references the in-repo design spec and this plan so agents stay aligned.
 
-### Rapid fan-out options (to avoid prompting one-by-one)
-- **One-shot per agent:** Send the combined prompt for each workstream below; it includes the global setup plus the stream scope so you only paste once per agent.
-- **Broadcast start + scoped follow-up:** Paste the global setup prompt into multiple agents at once (or your shared channel), then paste only the single-line “scope reminder” bullets per agent. This cuts down on repeated long prompts.
-- **Use the scope table as a checklist:** Assign agents A–H, paste the matching combined prompt, and tick the box in your tracker; do not mix scopes between agents.
-- **If you need to re-prompt** (agent drift/refresh), resend only the combined prompt for that workstream—skip the global setup unless the agent lost context.
-
 **Global setup prompt (send to every agent before workstream specifics):**
 """
 You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md for requirements, scope, and conventions. Honor global flags (`--config`, `--project-root`, `--dry-run`, `--verbose/-v`, `--quiet/-q`, `--version`) and keep all subprocess calls shell=False with explicit arg lists. Favor Typer for CLI, Pydantic/dataclasses for config, tomllib/tomli for TOML parsing. Preserve the config surface in the design spec (venv_dir, default_python, build_backend, test_runner, paths, publish, deps, tasks, pipelines). Use structured logging with verbosity and dry-run support. Write unit/integration tests where described.
@@ -187,63 +181,4 @@ Ownership reminder: you own UX/docs/help strings. Do not modify core logic, regi
 Implement Workstream H per docs/COPILOT_PLAN.md. Create pyproject.toml with console_scripts entry, runtime/dev deps. Add CI workflow covering lint/type-check/tests; plan matrix for ubuntu/macos/windows Git Bash per portability NFRs. Encode acceptance scenarios (venv/test/build/publish dry-run, ci-check pipeline, dirty git blocking) and capture logs/artifacts for evidence.
 
 Ownership reminder: you own packaging/CI. Avoid touching core logic unless required for packaging hooks; coordinate any such change explicitly.
-"""
-
-### Combined one-shot prompts (global setup + workstream scope in a single paste)
-Copy the relevant block and send it once to the agent; no separate global prompt needed. These are intentionally compact but still include the guardrails.
-
-**Workstream A (Bootstrap & App Context) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, Pydantic/dataclasses config, tomllib/tomli parsing, and structured logging with verbosity + dry-run. Preserve the config surface (venv_dir, default_python, build_backend, test_runner, paths, publish, deps, tasks, pipelines). Guardrails: do not redefine AppContext/config/task engine/logging helpers; stay within your scope; additive changes only.
-
-Task: Execute Workstream A. Deliver package layout, project-root detection with --project-root override, config discovery/merging order, typed schema matching sample TOML, AppContext with version/flags, and tests for root detection + config parsing/overrides. `devflow --help` should list stub commands. You own config/app/logging primitives; expose stable APIs for others.
-"""
-
-**Workstream B (Command Framework & Task Engine) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: import AppContext/config/logging from Workstream A; do not redefine them. Additive changes only.
-
-Task: Execute Workstream B. Build Command base/registry integrated with Typer, Task/Pipeline abstractions with dry-run, verbosity, env propagation, exit-code short-circuiting. Implement `devflow task <name>` with pipeline expansion and cycle detection. Add unit tests for pipelines, dry-run, error messaging. You own registry/task engine semantics; others register commands via your hooks.
-"""
-
-**Workstream C (Venv & Dependency Management) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: use config/AppContext/registry from owners; do not reimplement them. Additive changes only.
-
-Task: Execute Workstream C. Implement `devflow venv init` honoring default_python, venv_dir, --python, --recreate; add venv-aware command runner helpers and path helpers; implement `devflow deps sync` and `devflow deps freeze` with deterministic output and dry-run previews. Provide integration tests with temp projects. You own venv/deps helpers; others call them.
-"""
-
-**Workstream D (Test, Build, Publish) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: reuse config/AppContext/registry/venv/git helpers; do not recreate them. Additive changes only.
-
-Task: Execute Workstream D. Implement `devflow test` (pass-through args, venv enforcement), `devflow build` (configurable backend, dist handling), `devflow publish` (clean working tree check, optional pre-tests, build+upload via twine, signing, tagging per tag_format, --dry-run). Add integration tests for success/failure and dry-run behavior. You own only these commands.
-"""
-
-**Workstream E (Git Integration) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: reuse config/AppContext/registry; do not redefine task engine. Additive changes only.
-
-Task: Execute Workstream E. Build git helpers for status checks, tag formatting/creation, version sourcing (setuptools_scm or config fallback). Wire require_clean_working_tree, tag_on_publish, tag_format/tag_prefix, version_source flags. Add tests with temp git repos for dirty-tree blocking and idempotent tagging. Expose callable helpers for other commands.
-"""
-
-**Workstream F (Plugins & Extensibility) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: use registry/config from owners; do not change them. Additive changes only.
-
-Task: Execute Workstream F. Define plugin discovery via entry points/config module paths, plugin interface (e.g., register(registry, app)), and a sample plugin fixture adding a command/task. Ensure bad plugins fail gracefully. Add tests for discovery, registration, precedence, and isolation. You own plugin loader/interface only.
-"""
-
-**Workstream G (UX, Completion, Docs) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: reuse registry/config/helpers; do not alter core semantics. Additive changes only.
-
-Task: Execute Workstream G. Add `devflow completion <shell>`, ensure `devflow` with no args lists commands and project tasks, enrich help text with design-spec examples, maintain Quickstart/troubleshooting docs, add snapshot/help tests where practical. You own UX/docs/help strings only.
-"""
-
-**Workstream H (CI, Packaging, Evidence) – single message:**
-"""
-You are implementing the Python CLI tool "devflow." Read docs/DESIGN_SPEC.md and docs/COPILOT_PLAN.md. Honor global flags, shell=False subprocesses, Typer CLI, structured logging with verbosity + dry-run. Guardrails: do not modify core logic beyond packaging hooks; coordinate if needed. Additive changes only.
-
-Task: Execute Workstream H. Create pyproject.toml with console_scripts entry and deps; add CI workflow covering lint/type-check/tests with ubuntu/macos/windows Git Bash matrix; encode acceptance scenarios (venv/test/build/publish dry-run, ci-check pipeline, dirty git blocking) and capture logs/artifacts for evidence. You own packaging/CI.
 """
